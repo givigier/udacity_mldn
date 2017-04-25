@@ -17656,33 +17656,33 @@ Ux44CCeqUAAAAABJRU5ErkJggg==
 <p>Para o primeiro exemplo de optimal policy que citei, podemos observar que obtivemos o seguinte resultado:</p>
 <ul>
 <li><p>("forward", "red", None, None)</p>
-<p>-- forward: -17.44</p>
-<p>-- None: 2.43</p>
-<p>-- right: 0.40</p>
-<p>-- left: -4.86</p>
+<p>-- forward: -8.46</p>
+<p>-- None: 2.55</p>
+<p>-- right: -0.51</p>
+<p>-- left: -9.10</p>
 </li>
 </ul>
 <p>O resultado foi esperado e nessa situação o Smartcab não se moveria pois está em um sinal vermelho.</p>
 <p>Para o segundo exemplo, obtivemos os resultados:</p>
 <ul>
 <li><p>("forward", "green", None, None)</p>
-<p>--forward : 1.70</p>
-<p>--None : -4.72</p>
-<p>--right : 1.41</p>
-<p>--left : 0.78</p>
+<p>--forward : 1.55</p>
+<p>--None : -4.32</p>
+<p>--right : -0.10</p>
+<p>--left : -0.44</p>
 </li>
 </ul>
 <p>O resultado também foi o esperado pois o Smartcab deve seguir em frente em sinal verde se não houver outros veículos vindo da esquerda ou próximos.</p>
 <p>Analisando o sim_improved-learning.txt podemos observar algumas políticas que não podemos considerar corretas, como exemplo podemos citar:</p>
 <ul>
-<li><p>("left", "red", "forward", "left")</p>
-<p>-- forward : 0.00</p>
-<p>-- None : 0.00</p>
-<p>-- right : 0.00</p>
-<p>-- left : 0.00</p>
+<li><p>("right", "red", "left", None)</p>
+<p>--forward : 0.00</p>
+<p>--None : 2.66</p>
+<p>--right : 0.00</p>
+<p>--left : -8.67</p>
 </li>
 </ul>
-<p>Nesse caso, dado que o sinal está vermelho esperamos que a action None tenha um peso maior do que as outras, visto que o Smartcab não deve avançar o sinal vermelho. Entretanto, não foi isso que ocorreu pois todas as actions tem o mesmo peso.</p>
+<p>Nesse caso, dado que o sinal está vermelho e não há carros vindo à esquerda, o Smartcab pode virar à direita e seguir. Por isso, esperávamos que ação com maior peso fosse right. Entretanto, nessa situação o Smartcab ficaria parado.</p>
 
 </div>
 </div>
