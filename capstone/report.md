@@ -69,6 +69,24 @@ Com base nas estatísticas da tabela anterior, podemos ver que o preço de fecha
 
 #### Visualização Exploratória
 
+Um fator interessante de analisarmos visualmente é a relação entre Volume e Preço de Fechmanto. Segundo [analistas técnicos](http://br.advfn.com/educacional/analise-tecnica/volume), há uma forte relação entre a tendência de aumento de preços e o aumento do volume de negociação, alguns inclusive só confiam em uma tendência de aumento de preços se a mesma vier acompanhar de aumento também no volume de negociações. Nessa seção nosso objetivo será analisar visualmente os gráficos de Volume em relação tempo e Preço de Fechamento em relação ao tempo.
+
+<p align="center">
+  **Gráfico Preço de fechamento x Data de negociação**
+  ![Gráfico Preço de fechamento x Data de negociação](close.png)
+</p>
+
+<p align="center">
+  **Gráfico Volume x Data de negociação**
+  ![Gráfico Volume x Data de negociação](volume.png)
+</p>
+
+Ao plotarmos os gráficos, não conseguimos obter claramente tantos pontos que confirmem essa relação entre tendência de alta de preço e aumento do volume. Entretanto, há sim alguns pontos que apresentam essa relação. Podemos apontar por exemplo, o intervalo após 11/03/2017. Percebemos um aumento no volume de negociações e também um aumento nos preços da ação.
+
 #### Algoritmos e Técnicas
+
+O algoritmo escolhido foi o LinearRegression. O primeiro passo para definir porque esse algoritmo seria utilizado foi o tipo do problema. O problema que estamos resolvendo é um problema de regressão, e para o solucionarmos, precisamos escolher um algoritmo especificamente para esse tipo de problema. O objetivo do LinearRegression é encontrar uma equação que melhor se adapte aos dados, ou seja, encontrar uma equação que minimize o erro. Como características desse algoritmo podemos citar: fácil de interpretar, não requer muito ajuste dos parâmetros e é rápido.
+
+Conforme dito, o LinearRegression é um algoritmo que não requer muito ajuste dos parâmetros. Podemos observar isso através da documentação do Scikit
 
 #### Dados de Referência
