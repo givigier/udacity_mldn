@@ -2,7 +2,7 @@
 ## Projeto Final
 
 Gabriel Givigier  
-23 de julho de 2017
+28 de julho de 2017
 
 ### 1. Definição
 
@@ -105,20 +105,18 @@ Podemos ver que, no intervalo que analisamos, o Ibov ficou aproximadamente entre
 Um fator interessante de analisarmos visualmente é a relação entre Volume e Preço de Fechamento. Segundo [analistas técnicos](http://br.advfn.com/educacional/analise-tecnica/volume), há uma forte relação entre a tendência de aumento de preços e o aumento do volume de negociação, alguns inclusive só confiam em uma tendência de aumento de preços se a mesma vier acompanhar de aumento também no volume de negociações. Nessa seção nosso objetivo será analisar visualmente os gráficos de Volume em relação tempo e Preço de Fechamento em relação ao tempo.
 
 <p align="center">
-  **Gráfico Preço de fechamento x Data de negociação**
-  ![Gráfico Preço de fechamento x Data de negociação](close.png)
+  ![Gráfico Preço de fechamento x Data de negociação](graph1.png)
 </p>
 
 <p align="center">
-  **Gráfico Volume x Data de negociação**
-  ![Gráfico Volume x Data de negociação](volume.png)
+  ![Gráfico Volume x Data de negociação](graph2.png)
 </p>
 
-Ao plotarmos os gráficos, não conseguimos obter claramente tantos pontos que confirmem essa relação entre tendência de alta de preço e aumento do volume. Entretanto, há sim alguns pontos que apresentam essa relação. Podemos apontar por exemplo, o intervalo após 11/03/2017. Percebemos um aumento no volume de negociações e também um aumento nos preços da ação.
+Ao plotarmos os gráficos, não conseguimos obter claramente tantos pontos que confirmem essa relação entre tendência de alta de preço e aumento do volume. Entretanto, há sim alguns pontos que apresentam essa relação. Podemos apontar por exemplo, o intervalo após 07/02/2017. Percebemos um aumento no volume de negociações e também um aumento nos preços da ação.
 
 #### Algoritmos e Técnicas
 
-O algoritmo escolhido foi o LinearRegression. O primeiro passo para definir porque esse algoritmo seria utilizado foi o tipo do problema. O problema que estamos resolvendo é um problema de regressão, e para o solucionarmos, precisamos escolher um algoritmo especificamente para esse tipo de problema. O objetivo do LinearRegression é encontrar uma equação que melhor se adapte aos dados, ou seja, encontrar uma equação que minimize o erro. Como características desse algoritmo podemos citar: fácil de interpretar, não requer muito ajuste dos parâmetros e é rápido.
+O algoritmo escolhido foi o LinearRegression. O primeiro passo para definir porque esse algoritmo seria utilizado, foi o tipo do problema. O problema que estamos resolvendo é um problema de regressão, e para o solucionarmos, precisamos escolher um algoritmo especificamente para esse tipo de problema. O objetivo do LinearRegression é encontrar uma equação que melhor se adapte aos dados, ou seja, encontrar uma equação que minimize o erro. Como características desse algoritmo podemos citar: fácil de interpretar, não requer muito ajuste dos parâmetros e é rápido.
 
 Conforme dito anteriormente, o [LinearRegression](http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html#examples-using-sklearn-linear-model-linearregression) é um algoritmo que não requer muitos ajustes nos parâmetros. Podemos observar isso através da documentação do Scikit Learn. Esse algoritmo possui 4 parâmetros(fit_intercept, normalize, copy_X, n_jobs) e todos são opcionais, abaixo descreveremos o propósito de cada parâmetro:
 
@@ -127,7 +125,7 @@ Conforme dito anteriormente, o [LinearRegression](http://scikit-learn.org/stable
 - **copy_X**: Tem como valor padrão True e indica se os dados de treinamento devem ser copiados, caso essa opção seja definida como False, os dados de treinamento podem ser sobreescritos.
 - **n_jobs**: Tem como valor padrão 1 e define quantos jobs serão utilizados para computar o problema. Pode ser útil em problemas mais complexos pois permite otimizar o uso da CPU.
 
-Além de definir qual algoritmo utilizaremos, também precisamos definir qual técnica utilizaremos para separar nossos dados em dados de treinamento e teste. Ao definirmos essa técnica, precisamos levar em consideração que os dados de ações da bolsa de valores possuem uma característica que nos impede de usar qualquer técnica de validação cruzada. Esses dados são dependentes de ordem. Por exemplo, os dados do dia 16-06-17 vem após os dados do dia 15-06-17 e essa ordem deve ser preservada. Não podemos alterar a ordem desses dados, uma técnica muito comum em aprendizado de máquina. Em caso de alteração da ordem dessa série temporal, podemos adicionar de forma indesejada, um viés em nossa análise.
+Além de definir qual algoritmo utilizaremos, também precisamos definir qual técnica utilizaremos para separar nossos dados em dados de treinamento e teste. Ao definirmos essa técnica, precisamos levar em consideração que os dados de ações da bolsa de valores possuem uma característica que nos impede de usar qualquer técnica de validação cruzada. Esses dados são dependentes de ordem. Por exemplo, os dados do dia 16-06-17 vem após os dados do dia 15-06-17, e essa ordem deve ser preservada. Não podemos alterar a ordem desses dados, uma técnica muito comum em aprendizado de máquina. Em caso de alteração da ordem dessa série temporal, podemos adicionar de forma indesejada, um viés em nossa análise.
 
 Portanto, a técnica de separação dos dados em treinamento e teste levará em consideração os pontos observados acima e não alterará a ordem dos dados. Utilizaremos uma variação do KFold que também está presente no Scikit Learn, a [TimeSeriesSplit](http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html), que possui um único parâmetro, a quantidade de divisões a serem feitas.
 
@@ -139,13 +137,13 @@ Nesse projeto, tentaremos construir um modelo que tenha uma precisão de ao meno
 
 #### Pré-Processamento dos Dados
 
-O primeiro processamento após o carregamento dos dados foi a reordenação. Nessa etapa, nós reordenamos os dados de forma que os dados mais antigos ficassem no ínicio da série temporal.
+O primeiro processamento após o carregamento dos dados foi a reordenação. Nessa etapa, nós reordenamos os dados de forma que os dados mais antigos ficassem nos menores índices do DataFrame.
 
-Após a reordenação, demos início à etapa de adicionar novas características ao conjunto de dados da ação da Ambev. Inicialmente adicionamos a característica 'Next Price', que é o preço da ação no dia seguinte no momento do fechamento do mercado. Por exemplo, o 'Next Price' para o dia 21 de julho será o preço da ação no momento do fechamento do mercado no dia 22 de julho. Essa característica é a que tentaremos preve, ou seja, será o nosso alvo.
+Após a reordenação, demos início à etapa de adicionar novas características ao conjunto de dados da ação da Ambev. Inicialmente adicionamos a característica 'Next Price', que é o preço da ação no dia seguinte no momento do fechamento do mercado. Por exemplo, o 'Next Price' para o dia 21 de julho será o preço da ação no momento do fechamento do mercado no dia 22 de julho. Essa característica é a que tentaremos prever, ou seja, será o nosso alvo.
 
 Também achei interessante adicionar a característica 'Change', que representa a porcentagem de variação do preço da ação em relação ao dia anterior.
 
-Após adicionarmos essas duas características, adicionamos alguns dados presentes no conjunto de dados do Ibov no conjunto de dados da Ambev. Adicionamos as características, 'Ibov Close', 'Ibov High' e 'Ibov Low' que são equivalentes às características 'Close', 'High' e 'Low' que apresentamos no conjunto de dados do Ibov. As características do Ibov foram adicionadas pois eu considero importante adicionarmos características que sejam relacionadas apenas com a ação, mas com o mercado em geral e o Ibov nos permite ter essa visão mais global.
+Após adicionarmos essas duas características, adicionamos alguns dados presentes no conjunto de dados do Ibov no conjunto de dados da Ambev. Adicionamos as características, 'Ibov Close', 'Ibov High' e 'Ibov Low' que são equivalentes às características 'Close', 'High' e 'Low' que apresentamos no conjunto de dados do Ibov. As características do Ibov foram adicionadas pois eu considero importante adicionarmos características que não sejam relacionadas apenas com a ação, mas com o mercado em geral, e o Ibov nos permite ter essa visão mais global.
 
 Por fim, adicionamos a característica 'Day of Week', pois considerei a hipótese de que poderia haver uma relação de dias com maiores investimentos e o dia da semana.
 
@@ -160,7 +158,7 @@ Como exemplo dos dados após a adição das características, temos:
 
 Vale esclarecer que para a coluna 'Day of Week', os valores 0, 1, 2, 3 e 4, representam respectivamente segunda-feira, terça-feira, quarta-feira, quinta-feira e sexta-feira.
 
-Após a adição das novas características, verifiquei os dados em busca de valores nulos e possíveis erros. Um erro que procurei foi o preço da ação sendo 0.00, o que indicaria que a ação não existe. A primeira e última linhas precisaram removidos devido a valores nulos. Isso aconteceu por termos adicionado as características 'Change' e 'Next Day Price'. Ao adicionarmos a característica 'Change', adicionamos um valor nulo na primeira linha nessa coluna, pois não tínhamos o preço da ação no dia anterior e não tínhamos como calcular essa variação de preço. Também adicionamos um valor nulo na última linha, na coluna 'Next Day Price', pois não tínhamos o preço da ação no dia seguinte.
+Após a adição das novas características, verifiquei os dados em busca de valores nulos e possíveis erros. Um erro que procurei foi o preço da ação sendo 0.00, o que indicaria que a ação não existe. A primeira e última linhas precisaram ser removidas devido a valores nulos. Isso aconteceu por termos adicionado as características 'Change' e 'Next Day Price'. Ao adicionarmos a característica 'Change', adicionamos um valor nulo na primeira linha nessa coluna, pois não tínhamos o preço da ação no dia anterior e não tínhamos como calcular essa variação de preço. Também adicionamos um valor nulo na última linha, na coluna 'Next Day Price', pois não tínhamos o preço da ação no dia seguinte.
 
 Também analisei os dados quanto a presença de outliers. A única característica que possuía outliers foi o Volume. Em todas as outras características não tivemos outliers. Portanto, decidi deixar todos os dados e não remover os outliers pois eram somente da característica Volume.
 
@@ -168,11 +166,11 @@ Além disso, após o carregamento dos dados, arredondamos todos os valores para 
 
 #### Implementação
 
-Na primeira parte da implementação do projeto, foi realizado o carregamento dos dados utilizando a função read_csv do Pandas, com a qual carregamos os dados do arquivo *abev3-google.csv* em um DataFrame.
+Na primeira parte da implementação do projeto, foi realizado o carregamento dos dados utilizando a função read_csv do Pandas, com a qual carregamos os dados do arquivo *abev3.csv* e *ibov.csv* em DataFrame.
 
-Após o carregamento dos dados, houve a divisão desses dados em características e o nosso alvo. Como características, foram selecionados os dados de Volume e Close, e como alvo nós temos os dados Next Day Price, que é de fato o que queremos prever.
+Após o carregamento dos dados, houve a divisão desses dados em características e o nosso alvo. Como características, foram selecionados os dados de Volume e Close, e como alvo nós temos os dados de Next Day Price, que é de fato o que queremos prever.
 
-Também foi feita a divisão desses dados em 10 parte de dados de treinamento e dados de teste, utilizando o TimeSeriesSplit. Esse algoritmo foi utilizado e assim mantivemos a ordem dos dados, conforme explicado na seção Algoritmos e Técnicas. Após a divisão, tínhamos as variáveis X_train e X_test, que continham os dados de treinamento e teste das características. Também tínhamos y_train e y_test, que continham os dados de treinamento e teste do nosso alvo.
+Também foi feita a divisão desses dados em 10 partes de dados de treinamento e dados de teste, utilizando o TimeSeriesSplit. Esse algoritmo foi utilizado e assim mantivemos a ordem dos dados, conforme explicado na seção Algoritmos e Técnicas. Após a divisão, tínhamos as variáveis X_train e X_test, que continham os dados de treinamento e teste das características. Também tínhamos y_train e y_test, que continham os dados de treinamento e teste do nosso alvo.
 
 Com os dados divididos em treinamento e testes, os dados de treinamento foram utilizados para treinar o modelo utilizando o algoritmo LinearRegression. Para isso, utilizamos o objeto clf, que havia sido instanciado anteriormente, e chamamos o método fit com X_train e y_train como parâmetros. Após o treinamento do modelo, os dados de teste foram utilizados com o intuito de prever os preços. Para isso, utilizamos o método score, que internamente faz uma predição utilizando os dados de teste no modelo treinado, e além disso, aplica a métrica r-quadrado para verificar qual a precisão do modelo.
 
@@ -184,20 +182,67 @@ Além do LinearRegression, também testei o algoritmo SVR. Porém, esse algoritm
 
 Com a nota da primeira implementação como base, testei outras combinações de parâmetros com o intuito de obter uma performance melhor do que a inicial. Entretanto, em todas as combinações testadas, a nota foi menor do que a implementação inicial. A única combinação que obteve desempenho próximo da nota inicial foi 'Volume', 'Close' e 'Change'.
 
-Como nenhuma das combinações obteve uma nota significativamente maior do que a implementação inicial, optei por utilizar apenas 'Volume' e 'Close' como características e 'Next Day Price' como alvo.
-
-Após esses testes, utilizei o GridSearchCV para fazer a otimização dos parâmetros. Como parâmetros a serem otimizados, foram utilizados o 'fit_intercept' e 'normalize'. E apesar dessa tentativa, a nota foi 0.765, muito próxima à do modelo não otimizado.
+Após esses testes, utilizei o GridSearchCV para fazer a otimização dos parâmetros. Como parâmetros a serem otimizados, foram utilizados o 'fit_intercept' e 'normalize'. E apesar dessa tentativa, a nota foi 0.765, muito próxima à melhor nota dos modelos não otimizados.
 
 ### 4. Resultados
 
 #### Avaliação do Modelo e Validação
 
+Escolhemos como o modelo 'vencedor' para esse problema, o modelo que utiliza como características 'Volume' e 'Close' e tem como alvo 'Next Day Price'. Esse modelo utiliza o algoritmo LinearRegression e obteve um desempenho de 0.76 utilizando a métrica r-quadrado.
+
+Essa nota de 0.76 é o resultado da média das notas para cada iteração da nossa validação cruzada. As notas para cada uma das partições são apresentadas abaixo:
+
+|| Nota |
+|:-:|:-:|
+| Parte 1 | 0.81291561425612358 |
+| Parte 2 | 0.48792854143088044 |
+| Parte 3 | 0.92834237714820056 |
+| Parte 4 | 0.71730905444092019 |
+| Parte 5 | 0.6029155403830917 |
+| Parte 6 | 0.82135172426285108 |
+| Parte 7 | 0.67692980346945764 |
+| Parte 8 | 0.91703976970034928 |
+| Parte 9 | 0.79901912440184875 |
+| Parte 10 | 0.83643061811437747 |
+
+Apesar de termos tentado melhorar o modelo adicionando novas features, não obtivemos sucesso. E além disso, a adição de algumas características, nos fez obter notas piores do que modelos com menos características.
+
+Devido a nota 0.76 e a variação das notas de cada iteração, não podemos dizer que esse modelo é robusto o suficiente para tentar prever o preço da ação no dia seguinte. O mercado de ações é muito complexo e um modelo com apenas 0.76 de nota não é robusto o suficiente, pois certamente ocasionaria em muitas perdas caso tentássemos utilizá-lo.
+
 #### Justificação
+
+Apesar de o modelo construído não ser robusto o suficiente para utilizarmos em uma aplicação real no mercado de ações, atingimos o objetivo de obtermos uma nota maior do que 0.7. Além disso, esse modelo, apesar de não recomendado para uso profissional, pode servir como um bom indicativo de qual é a tendência de preço para o dia seguinte.
 
 ### 5. Conclusão
 
 #### Visualização de Forma Livre
 
+O gráfico abaixo é uma representação dos preços que o modelo construído previu e os preços reais para um determinado conjunto de testes, do dia 22 de agosto de 2016 até 20 de julho de 2017.
+
+O objetivo desse gráfico é avaliar a diferença entre o valor real e o valor predito pelo modelo.
+
+<p align="center">
+  ![](graph3.png)
+</p>
+
 #### Reflexão
 
+Nesse projeto eu criei um modelo para prever o preço da ação da Ambev no dia seguinte. Ao final do projeto obtivemos um modelo que teve como nota aproximadamente 0.76, em uma escala de 0 a 1.
+
+Como etapas da criação desse modelo, nós tivemos primeiramente a escolha da fonte de onde coletaríamos os dados da ação. Obtemos os dados através do Google Finance por conseguirmos obter de forma fácil e confiável os dados que queríamos. Com os dados em mãos, os carregamos em memória utilizando o Pandas para ler os dados a partir do CSV que havíamos obtido no Google Finance.
+
+Após o carregamento dos dados, fizemos algumas análises sobre o conjunto de dados para entendermos melhor algumas características. Por exemplo, analisamos qual era a variância dos nossos dados. Com uma visão melhor sobre nossos dados, iniciamos o pré-processamento. Nessa etapa nós adicionamos qual seria o alvo, o que tentaríamos prever, que era o preço da ação no dia seguinte. Também adicionamos algumas características que poderiam ser interessantes, como por exemplo dados do Índice Bovespa, variação do preço da ação e dia da semana que a ação foi negociada.
+
+A próxima etapa do projeto foi a implementação do modelo. Inicialmente dividimos o conjunto de dados em treinamento e teste, respeitando a ordem dos dados. O primeiro algoritmo a ser testado foi o LinearRegression, e na primeira iteração, obtivemos um desempenho de 0.76. Após esse teste, utilizei o SVR, porém o resultado péssimo. Também testei o LinearRegression com algumas combinações de características diferentes das que eu havia testado na primeira iteração. Entretanto, não obtivemos notas muito melhores.
+
+Finalizar esse projeto foi bem mais complicado do que eu imaginava, especialmente porque nesse projeto os alunos não recebem um guia de quais técnicas ou algoritmos utilizar, como recebíamos nos projetos anteriores. Entretanto, o projeto foi bem importante para que eu tivesse uma visão mais geral de como é trabalhar com um problema real.
+
+Trabalhar nesse domínio de ações também foi muito desafiador. É uma área bem complexa, e que pequenos erros podem custar alguns milhares, ou até milhões, de reais. Além disso, há muitas variáveis que influenciam o preço de uma ação, o que torna difícil a tarefa de prever o preço futuro desses ativos. Dito isso, esse projeto serviu muito bem para estudo, porém não é recomendado seu uso em uma operação real de negociação de ações.
+
 #### Melhoria
+
+Como melhorias para esse projeto, poderíamos tentar encontrar novas características mais específicas que afetem o preço dessa ação. Um exemplo seria encontrar características específicas para o ramo de atuação da Ambev.
+
+Outra tentativa, se possível, seria obter mais dados dessa ação. Os dados que utilizamos tem periodicidade diária. Caso obtivéssemos os dados da ação a cada 30 minutos por exemplo, teríamos um volume maior de dados para analisar, e talvez obtivéssemos uma precisão melhor.
+
+Por último, eu tentaria utilizar outros algoritmos e comparar a performance com o LinearRegression.
